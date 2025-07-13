@@ -1,0 +1,179 @@
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "Glog.AI",
+          "organization": "Glog.AI",
+          "fullName": "Glog, Making software more secure",
+          "version": "1.0.0",
+          "semanticVersion": "1.0.0",
+          "informationUri": "https://www.glog.ai",
+          "rules": [
+            {
+              "id": "glog-a4b8bea9-adee-46d4-9c6b-e8f8b6b5cdb5",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe vulnerability \"Review URL Access for Approved Schemes: Allowing file:/ or Custom Schemes is Often Unexpected\" in Python arises when the `urllib.request` module is used to open URLs without properly validating the scheme. This can lead to security issues if an attacker is able to craft a URL that accesses local files or uses a custom scheme to perform unintended actions. The `file:` scheme, in particular, can be exploited to read local files, which may lead to information disclosure.\n\n### General Mitigation Advice\n\nTo mitigate this vulnerability, ensure that only approved URL schemes are allowed. Validate the scheme of the URL before processing it. Avoid using the `file:` scheme unless absolutely necessary and ensure that any custom schemes are thoroughly reviewed for security implications.\n\n### Source Code Fix Recommendation\n\nBelow is an example of how to safely use `urllib.request` by validating the URL scheme:\n\n```python\nimport urllib.request\nfrom urllib.parse import urlparse\n\ndef fetch_url(url):\n    # Parse the URL to extract the scheme\n    parsed_url = urlparse(url)\n    \n    # Define a list of allowed schemes\n    allowed_schemes = ['http', 'https']\n    \n    # Check if the scheme is in the list of allowed schemes\n    if parsed_url.scheme not in allowed_schemes:\n        raise ValueError(f\"URL scheme '{parsed_url.scheme}' is not allowed.\")\n    \n    # Proceed with opening the URL\n    with urllib.request.urlopen(url) as response:\n        return response.read()\n\n# Example usage\ntry:\n    content = fetch_url('http://example.com')\n    print(content)\nexcept ValueError as e:\n    print(e)\n```\n\n### Library Dependencies\n\nThe code example requires the following standard library modules, which are included with Python and do not require additional installation:\n\n- `urllib.request`\n- `urllib.parse`\n\n### Relevant OWASP Resources\n\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n- [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-939: Improper Authorization in Handler for Custom URL Scheme](https://cwe.mitre.org/data/definitions/939.html)\n- [CWE-73: External Control of File Name or Path](https://cwe.mitre.org/data/definitions/73.html)"
+              },
+              "properties": {
+                "tags": [
+                  "B310"
+                ]
+              }
+            },
+            {
+              "id": "glog-5181e5a3-9b3b-4720-880e-3a6b6d7b4b8d",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe vulnerability \"Initiating a Shell Process: Potential Injection and Security Concern Identified\" in Python arises when user input is passed directly to shell commands without proper validation or sanitization. This can lead to command injection attacks, where an attacker can execute arbitrary commands on the host system. The `os.system` function is particularly susceptible to this vulnerability because it executes the command in a subshell, allowing for shell metacharacters to be interpreted.\n\n### General Mitigation Advice\n\n1. **Avoid Using `os.system`:** Prefer using higher-level functions like `subprocess.run` with a list of arguments to avoid shell interpretation.\n2. **Input Validation and Sanitization:** Always validate and sanitize user inputs to ensure they do not contain malicious content.\n3. **Use Parameterized Functions:** When possible, use functions that allow parameterized inputs to prevent shell injection.\n4. **Least Privilege Principle:** Run your application with the least privileges necessary to limit the impact of a potential attack.\n\n### Source Code Fix Recommendation\n\nReplace `os.system` with `subprocess.run` using a list of arguments to avoid shell interpretation:\n\n```python\nimport subprocess\n\n# Original vulnerable code\n# os.system(f\"echo {user_input}\")\n\n# Secure code\ndef execute_command(user_input):\n    # Ensure user_input is validated and sanitized before use\n    subprocess.run([\"echo\", user_input], check=True)\n\n# Example usage\nuser_input = \"Hello, World!\"\nexecute_command(user_input)\n```\n\n### Library Dependencies\n\nThe code example requires the following standard library:\n\n- `subprocess`: This is part of the Python Standard Library and does not require additional installation.\n\n### Relevant OWASP Resources\n\n- [OWASP Command Injection](https://owasp.org/www-community/attacks/Command_Injection)\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')](https://cwe.mitre.org/data/definitions/78.html)"
+              },
+              "properties": {
+                "tags": [
+                  "B605"
+                ]
+              }
+            },
+            {
+              "id": "glog-40d6d102-1ab1-4742-8353-8c8b4f2e2e6f",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe vulnerability \"Initiating a Shell Process: Potential Injection and Security Concern Identified\" in Python arises when user input is passed directly to shell commands without proper validation or sanitization. This can lead to command injection attacks, where an attacker can execute arbitrary commands on the host system. The `os.system` function is particularly susceptible to this vulnerability because it executes the command in a subshell, allowing for shell metacharacters to be interpreted.\n\n### General Mitigation Advice\n\n1. **Avoid Using `os.system`:** Prefer using higher-level functions like `subprocess.run` with a list of arguments to avoid shell interpretation.\n2. **Input Validation and Sanitization:** Always validate and sanitize user inputs to ensure they do not contain malicious content.\n3. **Use Parameterized Functions:** When possible, use functions that allow parameterized inputs to prevent shell injection.\n4. **Least Privilege Principle:** Run your application with the least privileges necessary to limit the impact of a potential attack.\n\n### Source Code Fix Recommendation\n\nReplace `os.system` with `subprocess.run` using a list of arguments to avoid shell interpretation:\n\n```python\nimport subprocess\n\n# Original vulnerable code\n# os.system(f\"echo {user_input}\")\n\n# Secure code\ndef execute_command(user_input):\n    # Ensure user_input is validated and sanitized before use\n    subprocess.run([\"echo\", user_input], check=True)\n\n# Example usage\nuser_input = \"Hello, World!\"\nexecute_command(user_input)\n```\n\n### Library Dependencies\n\nThe code example requires the following standard library:\n\n- `subprocess`: This is part of the Python Standard Library and does not require additional installation.\n\n### Relevant OWASP Resources\n\n- [OWASP Command Injection](https://owasp.org/www-community/attacks/Command_Injection)\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')](https://cwe.mitre.org/data/definitions/78.html)"
+              },
+              "properties": {
+                "tags": [
+                  "B605"
+                ]
+              }
+            }
+          ],
+          "language": "en-US",
+          "contents": [
+            "localizedData",
+            "nonLocalizedData"
+          ],
+          "isComprehensive": false
+        }
+      },
+      "language": "en-US",
+      "results": [
+        {
+          "ruleId": "glog-a4b8bea9-adee-46d4-9c6b-e8f8b6b5cdb5",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Audit url open for permitted schemes. Allowing use of file:/ or custom schemes is often unexpected."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "download_and_prepare_models.py"
+                },
+                "region": {
+                  "startLine": 36,
+                  "startColumn": 5,
+                  "endLine": 36,
+                  "endColumn": 42,
+                  "snippet": {
+                    "text": "    urllib.request.urlretrieve(url, path)\n"
+                  }
+                },
+                "contextRegion": {
+                  "startLine": 35,
+                  "endLine": 37,
+                  "snippet": {
+                    "text": "    path.parent.mkdir(parents=True, exist_ok=True)\n    urllib.request.urlretrieve(url, path)\n\n"
+                  }
+                }
+              }
+            }
+          ],
+          "properties": {
+            "issue_severity": "MEDIUM",
+            "issue_confidence": "HIGH"
+          }
+        },
+        {
+          "ruleId": "glog-5181e5a3-9b3b-4720-880e-3a6b6d7b4b8d",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "Starting a process with a shell, possible injection detected, security issue."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "download_and_prepare_models.py"
+                },
+                "region": {
+                  "startLine": 26,
+                  "startColumn": 9,
+                  "endLine": 26,
+                  "endColumn": 23,
+                  "snippet": {
+                    "text": "        os.system(cmd)\n"
+                  }
+                },
+                "contextRegion": {
+                  "startLine": 25,
+                  "endLine": 27,
+                  "snippet": {
+                    "text": "        cmd = \"optimum-cli export openvino --model stabilityai/sdxl-turbo --task stable-diffusion --weight-format fp16 \" + model_dir + \"/sdxl-turbo/FP16\"\n        os.system(cmd)\n    else:\n"
+                  }
+                }
+              }
+            }
+          ],
+          "properties": {
+            "issue_severity": "HIGH",
+            "issue_confidence": "HIGH"
+          }
+        },
+        {
+          "ruleId": "glog-40d6d102-1ab1-4742-8353-8c8b4f2e2e6f",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "Starting a process with a shell, possible injection detected, security issue."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "download_and_prepare_models.py"
+                },
+                "region": {
+                  "startLine": 17,
+                  "startColumn": 9,
+                  "endLine": 17,
+                  "endColumn": 23,
+                  "snippet": {
+                    "text": "        os.system(cmd)\n"
+                  }
+                },
+                "contextRegion": {
+                  "startLine": 16,
+                  "endLine": 18,
+                  "snippet": {
+                    "text": "        print(\"llm download command:\",cmd)\n        os.system(cmd)\n    else:\n"
+                  }
+                }
+              }
+            }
+          ],
+          "properties": {
+            "issue_severity": "HIGH",
+            "issue_confidence": "HIGH"
+          }
+        }
+      ],
+      "newlineSequences": [
+        "\r\n",
+        "\n"
+      ]
+    }
+  ]
+}
